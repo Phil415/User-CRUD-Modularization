@@ -32,7 +32,40 @@ def users_new():
         
     return render_template("users_new.html")
 
+@app.route('/users/<id>')
+def users_show(id):
+    cur = mysql.connection.cursor()
+    sql = "SELECT * FROM users WHERE id=" + id
+    cur.execute(sql)
+    result = cur.fetchone()
+    mysql.connection.commit()
+    cur.close()
+    return render_template("users_show.html", result=result)
+
+@app.route('/users/<id>/delete')
+def users_delete(id):
+    cur = mysql.connection.cursor()
+    sql = "DELETE FROM users WHERE id=" + id
+    cur.execute(sql)
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('users'))
+
+@app.route('/users/<id>/edit', methods=["GET", "POST"])
+def users_edit(id):
+    if request.form:
+        cur = mysql.connection.cursor()
+        sql = "UPDATE users SET first_name = '" + request.form.get('firstname') + "', last_name = '" + request.form.get('lastname') + "', email = '" + request.form.get('email') + "' WHERE id=" + id
+        cur.execute(sql)
+        mysql.connection.commit()
+        cur.close()
+
+    cur = mysql.connection.cursor()
+    sql = "SELECT *  FROM users WHERE id=" + id
+    cur.execute(sql)
+    result = cur.fetchone()
+    mysql.connection.commit()
+    cur.close()
+    return render_template("users_edit.html", result=result)
+
 app.run(debug=True)
-
-
-
