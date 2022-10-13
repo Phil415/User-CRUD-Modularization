@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>
+        All Users
+    </h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Created At</th>
+        </tr>
+        {% for row in result %}
+        <tr>
+            <td>{{row.0}}</td>
+            <td>{{row.1}} {{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>{{row.4}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{url_for('users_new')}}">Add a New User</a>
+{% endblock %}
